@@ -7,31 +7,28 @@ import { Deal, DealDocument } from './shemas/deal.shema';
 
 @Injectable()
 export class DealsService {
+  constructor(@InjectModel(Deal.name) private dealModel: Model<DealDocument>) {}
+  private deals = [];
 
+  async getAll(nameTag: string): Promise<Deal[]> {
+    return this.dealModel.find({ owner: nameTag }).exec();
+  }
 
-    constructor(@InjectModel(Deal.name) private dealModel: Model<DealDocument>) {
+  async getById(id: string): Promise<Deal> {
+    return this.dealModel.findById(id);
+  }
 
-    }
-    private deals = [];
+  async create(dealDto: CreateDealDto): Promise<Deal> {
+    const newDeal = new this.dealModel(dealDto);
+    console.log(newDeal);
+    return newDeal.save();
+  }
 
-    async getAll(): Promise<Deal[]> {
-        return this.dealModel.find().exec();
-    }
+  async remove(id: string): Promise<Deal> {
+    return this.dealModel.findByIdAndRemove(id);
+  }
 
-    async getById(id: string): Promise<Deal> {
-        return this.dealModel.findById(id);
-    }
-
-    async create(dealDto: CreateDealDto): Promise<Deal> {
-        const newDeal = new this.dealModel(dealDto);
-        return newDeal.save();
-    }
-
-    async remove(id: string): Promise<Deal> {
-        return this.dealModel.findByIdAndRemove(id);
-    }
-
-    async update(id: string, dealDto: UpdateDealDto): Promise<Deal> {
-        return this.dealModel.findByIdAndUpdate(id, dealDto, {new: true});
-    }
+  async update(id: string, dealDto: UpdateDealDto): Promise<Deal> {
+    return this.dealModel.findByIdAndUpdate(id, dealDto, { new: true });
+  }
 }

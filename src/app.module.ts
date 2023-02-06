@@ -3,13 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DealsModule } from './deals/deals.module';
-import config from "../config";
+import config from '../config';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [
-    DealsModule,
-    MongooseModule.forRoot(config.mongoUri)
-  ],
+  imports: [DealsModule, UsersModule, MongooseModule.forRoot(config.mongoUri)],
   controllers: [AppController],
   providers: [AppService],
 })
